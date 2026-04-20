@@ -1,0 +1,46 @@
+{
+  "expo": {
+    "name": "AutoRepair",
+    "slug": "autorepair",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "autorepair",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "resizeMode": "contain",
+      "backgroundColor": "#FFFFFF"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.autorepair.app",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "We use your location to find nearby auto repair shops."
+      }
+    },
+    "android": {
+      "package": "com.autorepair.app",
+      "permissions": ["ACCESS_COARSE_LOCATION", "ACCESS_FINE_LOCATION", "NOTIFICATIONS"]
+    },
+    "web": {
+      "bundler": "metro"
+    },
+    "plugins": [
+      [
+        "expo-notifications",
+        {
+          "color": "#FF6A1A"
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Allow AutoRepair to use your location to find nearby shops."
+        }
+      ]
+    ],
+    "extra": {
+      "stripePublishableKey": "pk_test_replace_me"
+    }
+  }
+}
