@@ -64,10 +64,12 @@ App.tsx             Root component with SafeAreaProvider + GestureHandlerRootVie
 
 ## Design System
 
-- **Primary:** `#FF6A1A` (orange)
-- **Black:** `#0B0B0B`
+- **Primary:** `#1E3A8A` (Deep Blue — trust, reliability)
+- **Secondary:** `#F97316` (Electric Orange — action, urgency)
+- **Accent Light Gray:** `#F3F4F6`
+- **Dark Gray / Ink:** `#111827`
 - **Background:** `#FFFFFF`
-- **Neutrals:** 10-step gray scale
+- **Neutrals:** 10-step Tailwind-aligned gray scale
 - **No gradients** — flat, accessible surfaces only
 - **Icons only** (Ionicons) — no emojis anywhere
 - **Typography:** Platform-native stack with a 9-step scale (display → overline)
