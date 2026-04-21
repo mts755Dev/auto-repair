@@ -59,7 +59,7 @@ export const Button: React.FC<Props> = ({
           paddingHorizontal: sizing.paddingHorizontal,
           minHeight: sizing.minHeight,
           opacity: pressed && !isDisabled ? 0.92 : 1,
-          alignSelf: fullWidth ? 'stretch' : 'flex-start',
+          alignSelf: fullWidth ? 'stretch' : 'auto',
         },
         style,
       ]}

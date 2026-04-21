@@ -14,6 +14,7 @@ import ServiceDetailScreen from '@/screens/home/ServiceDetailScreen';
 import ShopDetailScreen from '@/screens/home/ShopDetailScreen';
 import BookingFlowScreen from '@/screens/home/BookingFlowScreen';
 import NotificationsScreen from '@/screens/home/NotificationsScreen';
+import VehicleEditorScreen from '@/screens/profile/VehicleEditorScreen';
 
 import DiscoverScreen from '@/screens/discover/DiscoverScreen';
 
@@ -25,7 +26,6 @@ import ChatScreen from '@/screens/chat/ChatScreen';
 
 import ProfileScreen from '@/screens/profile/ProfileScreen';
 import VehiclesScreen from '@/screens/profile/VehiclesScreen';
-import VehicleEditorScreen from '@/screens/profile/VehicleEditorScreen';
 import PaymentMethodsScreen from '@/screens/profile/PaymentMethodsScreen';
 import AddPaymentMethodScreen from '@/screens/profile/AddPaymentMethodScreen';
 import SettingsScreen from '@/screens/profile/SettingsScreen';
@@ -45,6 +45,7 @@ export function HomeNavigator() {
       <HomeStack.Screen name="BookingDetail" component={BookingDetailScreen} />
       <HomeStack.Screen name="Chat" component={ChatScreen} />
       <HomeStack.Screen name="Notifications" component={NotificationsScreen} />
+      <HomeStack.Screen name="VehicleEditor" component={VehicleEditorScreen} />
     </HomeStack.Navigator>
   );
 }
@@ -57,6 +58,7 @@ export function DiscoverNavigator() {
       <DiscoverStack.Screen name="ShopDetail" component={ShopDetailScreen} />
       <DiscoverStack.Screen name="BookingFlow" component={BookingFlowScreen} />
       <DiscoverStack.Screen name="Chat" component={ChatScreen} />
+      <DiscoverStack.Screen name="VehicleEditor" component={VehicleEditorScreen} />
     </DiscoverStack.Navigator>
   );
 }

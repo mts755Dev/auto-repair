@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Shop } from '@/types';
 import { Card } from './Card';
@@ -16,13 +16,16 @@ type Props = {
 export const ShopCard: React.FC<Props> = ({ shop, distance, onPress, compact }) => {
   return (
     <Card onPress={onPress} padded={false} style={styles.card} elevated>
-      <View style={styles.hero}>
-        <View style={styles.heroPattern}>
-          <View style={[styles.dot, { top: 20, left: 28, backgroundColor: colors.primary }]} />
-          <View style={[styles.dot, { top: 60, left: 120, backgroundColor: colors.white, opacity: 0.4 }]} />
-          <View style={[styles.dot, { top: 40, right: 40, backgroundColor: colors.primaryDark, opacity: 0.5 }]} />
-          <View style={[styles.dot, { bottom: 12, left: 60, backgroundColor: colors.white, opacity: 0.3 }]} />
-        </View>
+      <View style={[styles.hero, { backgroundColor: shop.heroColor ?? colors.black }]}>
+        {shop.bannerUrl ? (
+          <Image
+            source={{ uri: shop.bannerUrl }}
+            style={StyleSheet.absoluteFill}
+            resizeMode="cover"
+          />
+        ) : null}
+        <View style={styles.scrim} />
+        <View style={styles.scrimTop} />
         <View style={styles.heroTopRow}>
           <Badge
             label={shop.type === 'mobile' ? 'Mobile mechanic' : 'Repair shop'}
@@ -55,9 +58,7 @@ export const ShopCard: React.FC<Props> = ({ shop, distance, onPress, compact }) 
           <Text style={[typography.captionStrong, { marginLeft: 4, color: colors.ink }]}>
             {shop.rating.toFixed(1)}
           </Text>
-          <Text style={[typography.caption, { marginLeft: 4 }]}>
-            ({shop.reviews})
-          </Text>
+          <Text style={[typography.caption, { marginLeft: 4 }]}>({shop.reviews})</Text>
           <Text style={[typography.caption, { marginHorizontal: 6 }]}>·</Text>
           <Ionicons name="location-outline" size={14} color={colors.gray500} />
           <Text style={[typography.caption, { marginLeft: 4, flex: 1 }]} numberOfLines={1}>
@@ -66,7 +67,10 @@ export const ShopCard: React.FC<Props> = ({ shop, distance, onPress, compact }) 
           </Text>
         </View>
         {!compact ? (
-          <Text style={[typography.caption, { marginTop: spacing.s, color: colors.gray700 }]} numberOfLines={2}>
+          <Text
+            style={[typography.caption, { marginTop: spacing.s, color: colors.gray700 }]}
+            numberOfLines={2}
+          >
             {shop.description}
           </Text>
         ) : null}
@@ -80,18 +84,21 @@ const styles = StyleSheet.create({
     marginBottom: spacing.m,
   },
   hero: {
-    height: 128,
-    backgroundColor: colors.black,
+    height: 140,
     position: 'relative',
+    overflow: 'hidden',
   },
-  heroPattern: {
+  scrim: {
     ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(11,11,11,0.28)',
   },
-  dot: {
+  scrimTop: {
     position: 'absolute',
-    width: 10,
-    height: 10,
-    borderRadius: 10,
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 72,
+    backgroundColor: 'rgba(0,0,0,0.18)',
   },
   heroTopRow: {
     position: 'absolute',
@@ -108,14 +115,17 @@ const styles = StyleSheet.create({
     left: spacing.l,
     width: 52,
     height: 52,
-    borderRadius: 12,
+    borderRadius: 14,
     backgroundColor: colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
+    borderWidth: 3,
+    borderColor: 'rgba(255,255,255,0.9)',
+    zIndex: 2,
   },
   heroLetter: {
     color: colors.white,
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: '800',
   },
   body: {

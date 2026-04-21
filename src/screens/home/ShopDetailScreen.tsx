@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Linking, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Image, Linking, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -48,12 +48,16 @@ export default function ShopDetailScreen({ navigation, route }: Props) {
     <Screen background={colors.white}>
       <Header title="" showBack rightIcon="heart-outline" />
       <ScrollView contentContainerStyle={{ paddingBottom: 120 }} showsVerticalScrollIndicator={false}>
-        <View style={styles.hero}>
-          <View style={styles.heroPattern}>
-            <View style={[styles.dot, { top: 32, left: 32, backgroundColor: colors.primary }]} />
-            <View style={[styles.dot, { top: 100, right: 40, backgroundColor: colors.white, opacity: 0.3 }]} />
-            <View style={[styles.dot, { bottom: 40, left: 60, backgroundColor: colors.primaryDark, opacity: 0.5 }]} />
-          </View>
+        <View style={[styles.hero, { backgroundColor: shop.heroColor ?? colors.black }]}>
+          {shop.bannerUrl ? (
+            <Image
+              source={{ uri: shop.bannerUrl }}
+              style={StyleSheet.absoluteFill}
+              resizeMode="cover"
+            />
+          ) : null}
+          <View style={styles.heroScrim} />
+          <View style={styles.heroScrimBottom} />
           <View style={styles.heroBadges}>
             <Badge
               label={shop.type === 'mobile' ? 'Mobile mechanic' : 'Repair shop'}
@@ -210,18 +214,21 @@ const InfoRow: React.FC<{
 
 const styles = StyleSheet.create({
   hero: {
-    height: 180,
-    backgroundColor: colors.black,
+    height: 220,
     position: 'relative',
+    overflow: 'hidden',
   },
-  heroPattern: {
+  heroScrim: {
     ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(11,11,11,0.25)',
   },
-  dot: {
+  heroScrimBottom: {
     position: 'absolute',
-    width: 14,
-    height: 14,
-    borderRadius: 14,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: 110,
+    backgroundColor: 'rgba(11,11,11,0.35)',
   },
   heroBadges: {
     position: 'absolute',
@@ -235,10 +242,12 @@ const styles = StyleSheet.create({
     left: spacing.xl,
     width: 64,
     height: 64,
-    borderRadius: 16,
+    borderRadius: 18,
     backgroundColor: colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
+    borderWidth: 3,
+    borderColor: 'rgba(255,255,255,0.92)',
   },
   heroLetterText: {
     color: colors.white,

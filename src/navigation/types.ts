@@ -23,6 +23,7 @@ export type HomeStackParamList = {
   Chat: { threadId: string };
   BookingDetail: { bookingId: string };
   Notifications: undefined;
+  VehicleEditor: { vehicleId?: string } | undefined;
 };
 
 export type DiscoverStackParamList = {
@@ -30,6 +31,7 @@ export type DiscoverStackParamList = {
   ShopDetail: { shopId: string };
   BookingFlow: { serviceIds?: string[]; shopId?: string } | undefined;
   Chat: { threadId: string };
+  VehicleEditor: { vehicleId?: string } | undefined;
 };
 
 export type BookingsStackParamList = {

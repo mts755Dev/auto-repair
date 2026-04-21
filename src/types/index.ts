@@ -78,6 +78,7 @@ export type Shop = {
   certifications?: string[];
   yearsInBusiness?: number;
   heroColor?: string;
+  bannerUrl?: string;
 };
 
 export type BookingStatus =

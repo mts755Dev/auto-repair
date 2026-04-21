@@ -33,10 +33,16 @@ export async function registerForPushNotificationsAsync(): Promise<string | null
     const projectId =
       (Constants as any)?.expoConfig?.extra?.eas?.projectId ??
       (Constants as any)?.easConfig?.projectId;
+
+    // Without an EAS projectId, remote push isn't wired up and
+    // getExpoPushTokenAsync logs a deprecation warning. Skip it and
+    // return a local-only placeholder for the demo UI.
+    if (!projectId) {
+      return 'ExponentPushToken[local-dev]';
+    }
+
     try {
-      const token = await Notifications.getExpoPushTokenAsync(
-        projectId ? { projectId } : undefined,
-      );
+      const token = await Notifications.getExpoPushTokenAsync({ projectId });
       return token.data;
     } catch {
       return 'ExponentPushToken[local-dev]';

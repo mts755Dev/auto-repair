@@ -1,6 +1,6 @@
 import React from 'react';
-import { Image, StyleSheet, Text, View, ViewStyle } from 'react-native';
-import { colors, typography } from '@/theme';
+import { Image, Platform, StyleSheet, Text, View, ViewStyle } from 'react-native';
+import { colors } from '@/theme';
 
 type Props = {
   name?: string;
@@ -19,6 +19,7 @@ export const Avatar: React.FC<Props> = ({
 }) => {
   const initials = getInitials(name);
   const bg = backgroundColor ?? pickColor(name);
+  const fontSize = Math.max(12, Math.round(size * 0.4));
 
   return (
     <View
@@ -32,9 +33,14 @@ export const Avatar: React.FC<Props> = ({
         <Image source={{ uri }} style={{ width: size, height: size, borderRadius: size / 2 }} />
       ) : (
         <Text
+          allowFontScaling={false}
+          numberOfLines={1}
           style={[
-            typography.title,
-            { color: colors.white, fontSize: Math.max(12, size * 0.38) },
+            styles.initials,
+            {
+              fontSize,
+              lineHeight: Math.round(fontSize * 1.15),
+            },
           ]}
         >
           {initials}
@@ -65,5 +71,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     overflow: 'hidden',
+  },
+  initials: {
+    color: colors.white,
+    fontWeight: '700',
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    letterSpacing: 0.2,
+    ...Platform.select({
+      android: { includeFontPadding: false },
+      default: {},
+    }),
   },
 });

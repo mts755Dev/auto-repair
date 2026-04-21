@@ -35,7 +35,7 @@ export default function AddPaymentMethodScreen({ navigation }: Props) {
     const next: Record<string, string> = {};
     if (!name.trim()) next.name = 'Cardholder name is required.';
     const digits = number.replace(/\s+/g, '');
-    if (digits.length < 12 || !luhnCheck(digits)) next.number = 'Enter a valid card number.';
+    if (digits.length !== 16 || !luhnCheck(digits)) next.number = 'Enter a valid 16-digit card number.';
     const [mm, yy] = expiry.split('/');
     const mo = parseInt(mm ?? '', 10);
     const yr = parseInt(yy ?? '', 10);
@@ -100,7 +100,7 @@ export default function AddPaymentMethodScreen({ navigation }: Props) {
           onChangeText={(t) => setNumber(formatCardNumber(t))}
           error={errors.number}
           leftIcon="card-outline"
-          maxLength={23}
+          maxLength={19}
         />
         <View style={{ flexDirection: 'row', gap: spacing.m }}>
           <View style={{ flex: 1 }}>
@@ -161,10 +161,12 @@ const styles = StyleSheet.create({
     paddingBottom: spacing.huge,
   },
   cardPreview: {
-    backgroundColor: colors.black,
+    backgroundColor: colors.white,
     borderRadius: radii.l,
     padding: spacing.xl,
     marginBottom: spacing.xl,
+    borderWidth: 1,
+    borderColor: colors.gray200,
   },
   cardBrand: {
     width: 44,
@@ -175,7 +177,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   cardNumber: {
-    color: colors.white,
+    color: colors.ink,
     fontSize: 22,
     letterSpacing: 2,
     marginTop: spacing.xl,
@@ -187,14 +189,14 @@ const styles = StyleSheet.create({
     marginTop: spacing.l,
   },
   cardLabel: {
-    color: 'rgba(255,255,255,0.6)',
+    color: colors.gray500,
     fontSize: 10,
     fontWeight: '700',
     textTransform: 'uppercase',
     letterSpacing: 1,
   },
   cardValue: {
-    color: colors.white,
+    color: colors.ink,
     fontSize: 14,
     fontWeight: '700',
     marginTop: 4,

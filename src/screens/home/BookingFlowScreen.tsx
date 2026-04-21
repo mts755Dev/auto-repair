@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import {
   Alert,
   FlatList,
+  Image,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -37,7 +38,7 @@ import { scheduleLocalNotification } from '@/utils/notifications';
 type Props = NativeStackScreenProps<HomeStackParamList, 'BookingFlow'>;
 
 type Step = 'services' | 'vehicle' | 'shop' | 'schedule' | 'review';
-const STEPS: Step[] = ['services', 'vehicle', 'shop', 'schedule', 'review'];
+const ALL_STEPS: Step[] = ['services', 'vehicle', 'shop', 'schedule', 'review'];
 
 export default function BookingFlowScreen({ navigation, route }: Props) {
   const user = useCurrentUser();
@@ -45,14 +46,23 @@ export default function BookingFlowScreen({ navigation, route }: Props) {
   const paymentMethods = usePaymentStore((s) => (user ? s.getByUser(user.id) : []));
   const defaultMethod = paymentMethods.find((m) => m.isDefault) ?? paymentMethods[0];
 
-  const [step, setStep] = useState<Step>(route.params?.serviceIds?.length ? 'vehicle' : 'services');
+  const preselectedShopId = route.params?.shopId;
+  const STEPS: Step[] = useMemo(
+    () => (preselectedShopId ? ALL_STEPS.filter((s) => s !== 'shop') : ALL_STEPS),
+    [preselectedShopId],
+  );
+
+  const [step, setStep] = useState<Step>(() => {
+    if (route.params?.serviceIds?.length) return 'vehicle';
+    return 'services';
+  });
   const [selectedServiceIds, setSelectedServiceIds] = useState<string[]>(
     route.params?.serviceIds ?? [],
   );
   const [vehicleId, setVehicleId] = useState<string | undefined>(
     vehicles.find((v) => v.isPrimary)?.id ?? vehicles[0]?.id,
   );
-  const [shopId, setShopId] = useState<string | undefined>(route.params?.shopId);
+  const [shopId, setShopId] = useState<string | undefined>(preselectedShopId);
   const [date, setDate] = useState<string>(dayjs().add(1, 'day').format('YYYY-MM-DD'));
   const [time, setTime] = useState<string>('10:00');
   const [notes, setNotes] = useState<string>('');
@@ -179,7 +189,11 @@ export default function BookingFlowScreen({ navigation, route }: Props) {
     );
 
     setProcessing(false);
-    navigation.replace('BookingDetail', { bookingId: booking.id });
+    navigation.popToTop();
+    navigation.getParent()?.navigate('BookingsTab', {
+      screen: 'BookingDetail',
+      params: { bookingId: booking.id },
+    } as any);
   };
 
   return (
@@ -229,11 +243,7 @@ export default function BookingFlowScreen({ navigation, route }: Props) {
             vehicles={vehicles}
             selected={vehicleId}
             onSelect={setVehicleId}
-            onAdd={() =>
-              navigation
-                .getParent()
-                ?.navigate('ProfileTab', { screen: 'VehicleEditor' } as any)
-            }
+            onAdd={() => navigation.navigate('VehicleEditor')}
           />
         )}
 
@@ -269,47 +279,33 @@ export default function BookingFlowScreen({ navigation, route }: Props) {
             paymentLast4={defaultMethod?.last4}
             estimatedDuration={estimatedDuration}
             estimatedTotal={estimatedTotal}
+            processing={processing}
+            onConfirm={onConfirm}
           />
         )}
       </ScrollView>
 
-      <View style={styles.footer}>
-        {step !== 'review' ? (
-          <>
-            <View>
-              <Text style={[typography.caption, { color: colors.gray500 }]}>
-                {step === 'services' ? 'Selected' : 'Estimated total'}
-              </Text>
-              <Text style={typography.h2}>
-                {step === 'services'
-                  ? `${selectedServices.length} service${selectedServices.length === 1 ? '' : 's'}`
-                  : formatCurrency(estimatedTotal)}
-              </Text>
-            </View>
-            <Button
-              title="Continue"
-              rightIcon="arrow-forward"
-              disabled={!canContinue}
-              fullWidth={false}
-              onPress={goNext}
-            />
-          </>
-        ) : (
-          <>
-            <View style={{ flex: 1 }}>
-              <Text style={[typography.caption, { color: colors.gray500 }]}>Total</Text>
-              <Text style={typography.h2}>{formatCurrency(estimatedTotal)}</Text>
-            </View>
-            <Button
-              title="Confirm & pay"
-              loading={processing}
-              fullWidth={false}
-              onPress={onConfirm}
-              rightIcon="lock-closed"
-            />
-          </>
-        )}
-      </View>
+      {step !== 'review' ? (
+        <View style={styles.footer}>
+          <View>
+            <Text style={[typography.caption, { color: colors.gray500 }]}>
+              {step === 'services' ? 'Selected' : 'Estimated total'}
+            </Text>
+            <Text style={typography.h2}>
+              {step === 'services'
+                ? `${selectedServices.length} service${selectedServices.length === 1 ? '' : 's'}`
+                : formatCurrency(estimatedTotal)}
+            </Text>
+          </View>
+          <Button
+            title="Continue"
+            rightIcon="arrow-forward"
+            disabled={!canContinue}
+            fullWidth={false}
+            onPress={goNext}
+          />
+        </View>
+      ) : null}
     </Screen>
   );
 }
@@ -403,8 +399,21 @@ const ShopStep: React.FC<{
             selected === shop.id ? { borderColor: colors.primary, borderWidth: 1.5 } : null,
           ]}
         >
-          <View style={styles.shopMark}>
-            <Text style={styles.shopMarkText}>{shop.name.charAt(0)}</Text>
+          <View
+            style={[
+              styles.shopMark,
+              { backgroundColor: shop.heroColor ?? colors.black },
+            ]}
+          >
+            {shop.bannerUrl ? (
+              <Image
+                source={{ uri: shop.bannerUrl }}
+                style={StyleSheet.absoluteFill}
+                resizeMode="cover"
+              />
+            ) : (
+              <Text style={styles.shopMarkText}>{shop.name.charAt(0)}</Text>
+            )}
           </View>
           <View style={{ flex: 1, marginLeft: spacing.m }}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -541,7 +550,21 @@ const ReviewStep: React.FC<{
   paymentLast4?: string;
   estimatedDuration: number;
   estimatedTotal: number;
-}> = ({ services, vehicle, shop, date, time, notes, paymentLast4, estimatedDuration, estimatedTotal }) => (
+  processing: boolean;
+  onConfirm: () => void;
+}> = ({
+  services,
+  vehicle,
+  shop,
+  date,
+  time,
+  notes,
+  paymentLast4,
+  estimatedDuration,
+  estimatedTotal,
+  processing,
+  onConfirm,
+}) => (
   <View>
     <Text style={typography.h2}>Review & confirm</Text>
     <Text style={[typography.body, { color: colors.gray700, marginTop: spacing.xs }]}>
@@ -624,6 +647,23 @@ const ReviewStep: React.FC<{
         <Text style={typography.h3}>{formatCurrency(estimatedTotal)}</Text>
       </View>
     </Card>
+
+    <View style={{ marginTop: spacing.l }}>
+      <Button
+        title="Confirm & pay"
+        loading={processing}
+        onPress={onConfirm}
+        rightIcon="lock-closed"
+      />
+      <Text
+        style={[
+          typography.caption,
+          { color: colors.gray500, textAlign: 'center', marginTop: spacing.s },
+        ]}
+      >
+        You'll only be charged when the service is completed.
+      </Text>
+    </View>
   </View>
 );
 
@@ -734,9 +774,9 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 12,
-    backgroundColor: colors.black,
     alignItems: 'center',
     justifyContent: 'center',
+    overflow: 'hidden',
   },
   shopMarkText: {
     color: colors.white,

@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   Dimensions,
   FlatList,
+  Image,
   Platform,
   Pressable,
   StyleSheet,
@@ -220,8 +221,21 @@ export default function DiscoverScreen({ navigation }: Props) {
                   ]}
                 >
                   <View style={styles.sheetHead}>
-                    <View style={styles.sheetMark}>
-                      <Text style={styles.sheetMarkText}>{item.name.charAt(0)}</Text>
+                    <View
+                      style={[
+                        styles.sheetMark,
+                        { backgroundColor: item.heroColor ?? colors.black },
+                      ]}
+                    >
+                      {item.bannerUrl ? (
+                        <Image
+                          source={{ uri: item.bannerUrl }}
+                          style={StyleSheet.absoluteFill}
+                          resizeMode="cover"
+                        />
+                      ) : (
+                        <Text style={styles.sheetMarkText}>{item.name.charAt(0)}</Text>
+                      )}
                     </View>
                     <Badge
                       label={item.type === 'mobile' ? 'Mobile' : 'Shop'}
@@ -444,9 +458,9 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 10,
-    backgroundColor: colors.black,
     alignItems: 'center',
     justifyContent: 'center',
+    overflow: 'hidden',
   },
   sheetMarkText: {
     color: colors.white,

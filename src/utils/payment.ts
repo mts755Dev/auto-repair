@@ -12,7 +12,7 @@ export function detectBrand(cardNumber: string): CardBrand {
 }
 
 export function formatCardNumber(raw: string): string {
-  const digits = raw.replace(/\D/g, '').slice(0, 19);
+  const digits = raw.replace(/\D/g, '').slice(0, 16);
   return digits.replace(/(\d{4})(?=\d)/g, '$1 ');
 }
 

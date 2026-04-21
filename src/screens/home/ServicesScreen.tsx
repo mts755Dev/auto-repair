@@ -66,6 +66,7 @@ export default function ServicesScreen({ navigation, route }: Props) {
         data={CATEGORIES}
         keyExtractor={(c) => c.key}
         showsHorizontalScrollIndicator={false}
+        style={styles.chips}
         contentContainerStyle={styles.chipsRow}
         renderItem={({ item }) => (
           <Chip
@@ -79,7 +80,11 @@ export default function ServicesScreen({ navigation, route }: Props) {
       <FlatList
         data={filtered}
         keyExtractor={(s) => s.id}
-        contentContainerStyle={styles.list}
+        style={styles.listFill}
+        contentContainerStyle={[
+          styles.list,
+          filtered.length === 0 ? styles.listEmpty : null,
+        ]}
         renderItem={({ item }) => (
           <ServiceCard
             service={item}
@@ -119,13 +124,25 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: colors.ink,
   },
+  chips: {
+    flexGrow: 0,
+    flexShrink: 0,
+  },
   chipsRow: {
     paddingHorizontal: spacing.xl,
-    paddingBottom: spacing.l,
+    paddingVertical: spacing.s,
+  },
+  listFill: {
+    flex: 1,
   },
   list: {
     paddingHorizontal: spacing.xl,
+    paddingTop: spacing.m,
     paddingBottom: spacing.huge,
+  },
+  listEmpty: {
+    flexGrow: 1,
+    justifyContent: 'center',
   },
   empty: {
     padding: spacing.xxl,

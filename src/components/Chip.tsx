@@ -17,8 +17,8 @@ export const Chip: React.FC<Props> = ({ label, selected, onPress, icon }) => {
       style={({ pressed }) => [
         styles.wrap,
         {
-          backgroundColor: selected ? colors.black : colors.white,
-          borderColor: selected ? colors.black : colors.gray300,
+          backgroundColor: selected ? colors.primary : colors.white,
+          borderColor: selected ? colors.primary : colors.gray300,
           opacity: pressed ? 0.9 : 1,
         },
       ]}

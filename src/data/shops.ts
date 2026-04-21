@@ -1,5 +1,8 @@
 import { Shop } from '@/types';
 
+const banner = (id: string) =>
+  `https://images.unsplash.com/${id}?auto=format&fit=crop&w=900&q=70`;
+
 export const SHOPS: Shop[] = [
   {
     id: 'shop_1',
@@ -24,6 +27,8 @@ export const SHOPS: Shop[] = [
     offersMobile: false,
     certifications: ['ASE Certified', 'AAA Approved'],
     yearsInBusiness: 24,
+    bannerUrl: banner('photo-1487754180451-c456f719a1fc'),
+    heroColor: '#1F2937',
   },
   {
     id: 'shop_2',
@@ -48,6 +53,8 @@ export const SHOPS: Shop[] = [
     offersMobile: true,
     certifications: ['ASE Certified'],
     yearsInBusiness: 8,
+    bannerUrl: banner('photo-1607603750909-408e193868c7'),
+    heroColor: '#1E3A8A',
   },
   {
     id: 'shop_3',
@@ -72,12 +79,13 @@ export const SHOPS: Shop[] = [
     offersMobile: false,
     certifications: ['ASE Master Tech'],
     yearsInBusiness: 31,
+    bannerUrl: banner('photo-1504222490345-c075b6008014'),
+    heroColor: '#111827',
   },
   {
     id: 'shop_4',
     name: 'Sunbelt Tire & Service',
-    description:
-      'Tire specialists with full mechanical service. Walk-ins welcome.',
+    description: 'Tire specialists with full mechanical service. Walk-ins welcome.',
     rating: 4.5,
     reviews: 198,
     priceLevel: 1,
@@ -95,6 +103,8 @@ export const SHOPS: Shop[] = [
     services: ['tires', 'alignment', 'oil-change', 'brakes'],
     offersMobile: false,
     yearsInBusiness: 12,
+    bannerUrl: banner('photo-1580273916550-e323be2ae537'),
+    heroColor: '#7C2D12',
   },
   {
     id: 'shop_5',
@@ -119,6 +129,8 @@ export const SHOPS: Shop[] = [
     offersMobile: false,
     certifications: ['Red Seal Technicians'],
     yearsInBusiness: 18,
+    bannerUrl: banner('photo-1493238792000-8113da705763'),
+    heroColor: '#7F1D1D',
   },
   {
     id: 'shop_6',
@@ -143,6 +155,8 @@ export const SHOPS: Shop[] = [
     offersMobile: true,
     certifications: ['ASE Certified'],
     yearsInBusiness: 6,
+    bannerUrl: banner('photo-1486006920555-c77dcf18193c'),
+    heroColor: '#92400E',
   },
   {
     id: 'shop_7',
@@ -166,12 +180,13 @@ export const SHOPS: Shop[] = [
     services: ['body', 'detailing', 'inspection'],
     offersMobile: false,
     yearsInBusiness: 27,
+    bannerUrl: banner('photo-1605152276897-4f618f831968'),
+    heroColor: '#1F2937',
   },
   {
     id: 'shop_8',
     name: 'Rocky Mountain Mechanics',
-    description:
-      'High-altitude vehicle specialists. Fleet service and roadside assistance.',
+    description: 'High-altitude vehicle specialists. Fleet service and roadside assistance.',
     rating: 4.6,
     reviews: 178,
     priceLevel: 2,
@@ -189,6 +204,8 @@ export const SHOPS: Shop[] = [
     services: ['oil-change', 'engine', 'transmission', 'brakes', 'tires', 'alignment'],
     offersMobile: false,
     yearsInBusiness: 15,
+    bannerUrl: banner('photo-1558618666-fcd25c85cd64'),
+    heroColor: '#064E3B',
   },
   {
     id: 'shop_9',
@@ -213,6 +230,8 @@ export const SHOPS: Shop[] = [
     offersMobile: false,
     certifications: ['Red Seal Technicians', 'EV Certified'],
     yearsInBusiness: 9,
+    bannerUrl: banner('photo-1492144534655-ae79c964c9d7'),
+    heroColor: '#7C1D1D',
   },
   {
     id: 'shop_10',
@@ -235,5 +254,7 @@ export const SHOPS: Shop[] = [
     services: ['detailing', 'inspection'],
     offersMobile: true,
     yearsInBusiness: 5,
+    bannerUrl: banner('photo-1503376780353-7e6692767b70'),
+    heroColor: '#0F172A',
   },
 ];

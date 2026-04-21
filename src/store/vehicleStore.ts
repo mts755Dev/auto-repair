@@ -3,6 +3,7 @@ import { persist } from 'zustand/middleware';
 import { jsonStorage } from './storage';
 import { Vehicle } from '@/types';
 import { uid } from '@/utils/id';
+import { DEMO_VEHICLES } from '@/data/vehicles';
 
 type VehicleState = {
   vehicles: Vehicle[];
@@ -12,6 +13,7 @@ type VehicleState = {
   setPrimary: (id: string, userId: string) => void;
   getByUser: (userId: string) => Vehicle[];
   getById: (id: string) => Vehicle | undefined;
+  seedDemoVehicles: (userId: string) => void;
 };
 
 export const useVehicleStore = create<VehicleState>()(
@@ -65,6 +67,19 @@ export const useVehicleStore = create<VehicleState>()(
 
       getByUser: (userId) => get().vehicles.filter((v) => v.userId === userId),
       getById: (id) => get().vehicles.find((v) => v.id === id),
+
+      seedDemoVehicles: (userId) => {
+        const existing = get().vehicles.filter((v) => v.userId === userId);
+        if (existing.length > 0) return;
+        const now = Date.now();
+        const seeded: Vehicle[] = DEMO_VEHICLES.map((v, i) => ({
+          ...v,
+          id: uid('veh'),
+          userId,
+          createdAt: new Date(now - i * 86400000).toISOString(),
+        }));
+        set({ vehicles: [...get().vehicles, ...seeded] });
+      },
     }),
     {
       name: 'autorepair.vehicles',
